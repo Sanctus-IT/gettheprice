@@ -12,7 +12,7 @@ app = Flask(__name__)
 def index():
         try:
             result = request.form.to_dict()
-            print(result)
+            #print(result)
 
         except:
             pass
@@ -23,22 +23,22 @@ def index():
                 msg="Passwords do not match"
                 return render_template('reg_user.html',msg=msg)
             elif result['password'] == result['c_password']:
-                print(result['first_name'])
+                #print(result['first_name'])
                 db = psycopg2.connect(
-                    database="Dreamland",
-                    user="postgres",
-                    password="1234",
-                    host="localhost"
-                )
-                print(db)
+                                    database = "dcore2hl3fm13v",
+                                    user = "pnevkxlqdlmdif",
+                                    password = "4d4a6fea5afacaab6d2e7372233725045c0b183e96925dec212ddf0ac468cdc1",
+                                    host = "ec2-174-129-192-200.compute-1.amazonaws.com"
+                                )
+                #print(db)
                 cur = db.cursor()
                 cur.execute(
-                    "INSERT INTO test_user (First_name,Last_name,Email,Password,Dob,Gender) VALUES ('{}','{}','{}','{}',{},'{}')".format(
+                    "INSERT INTO test_user1 (First_name,Last_name,Email,Password,Dob,Gender) VALUES ('{}','{}','{}','{}',{},'{}')".format(
                         result['first_name'], result['last_name'], result['mail'], result['password'],
                         result['datetimepicker'],
                         result['gender']))
                 db.commit()
-                print("Records created successfully")
+                #print(" user info created successfully")
                 db.close()
                 msg="You Are Now A Registered User!"
                 return render_template('reg_user.html',msg=msg)
@@ -55,6 +55,12 @@ def user_reg():
         return redirect('/reg')
     if result['password'] == result['c_password']:
         print(result['first_name'])
+        db = psycopg2.connect(
+            database="dcore2hl3fm13v",
+            user="pnevkxlqdlmdif",
+            password="4d4a6fea5afacaab6d2e7372233725045c0b183e96925dec212ddf0ac468cdc1",
+            host="ec2-174-129-192-200.compute-1.amazonaws.com"
+        )
         cur = db.cursor()
         cur.execute(
             "INSERT INTO test_user (First_name,Last_name,Email,Password,Dob,Gender) VALUES ('{}','{}','{}','{}',{},'{}')".format(
