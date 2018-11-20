@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request,flash,redirect
 import psycopg2
+import smtplib
+from email.mime.text import MIMEText
+
 app = Flask(__name__)
 # db = psycopg2.connect(
 #     database = "Dreamland",
@@ -14,7 +17,6 @@ db = psycopg2.connect(
                 password="4d4a6fea5afacaab6d2e7372233725045c0b183e96925dec212ddf0ac468cdc1",
                 host="ec2-174-129-192-200.compute-1.amazonaws.com"
             )
-print(db)
 @app.route('/', methods = ['GET','POST'])
 def index():
         try:
@@ -128,6 +130,47 @@ def Login():
             msg = "Username is incorrect."
             return render_template('login.html', msg=msg)
 
+        db.commit()
+        db.close()
+    except:
+        pass
+
+@app.route('/verify',methods=['GET', 'POST'])
+def verify():
+    try:
+        result = request.form.to_dict()
+        # print(result)
+    except:
+        pass
+    try:
+        result = request.form.to_dict()
+        if result == {}:
+            return render_template('forgot_password.html')
+        else:
+            email = result['mail']
+            cur = db.cursor()
+            cur.execute("SELECT email,password FROM test_user1 where email='{}'".format(email))
+            mail_user = cur.fetchone()
+            if mail_user==None:
+                msg = 'Incorrect mail ID'
+                return render_template('forgot_password.html',msg=msg)
+            else:
+                msg = 'Password sent to your mail'
+                fromx = 'dreamland.textmail@gmail.com'
+                to = str(mail_user[0])
+                message = MIMEText("Your dreamland password is '{}'".format(str(mail_user[1])))
+                message['Subject'] = 'Dream Land Password'
+                message['From'] = fromx
+                message['To'] = to
+
+                server = smtplib.SMTP('smtp.gmail.com:587')
+                server.starttls()
+                server.ehlo()
+                server.login('dreamland.textmail@gmail.com', 'dreamland@12345')
+                server.sendmail(fromx, to, message.as_string())
+                server.quit()
+
+                return render_template('forgot_password.html', msg=msg)
         db.commit()
         db.close()
     except:
