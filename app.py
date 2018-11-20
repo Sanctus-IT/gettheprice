@@ -38,7 +38,7 @@ def index():
                         result['datetimepicker'],
                         result['gender']))
                 db.commit()
-                #print(" user info created successfully")
+                #print("User info created successfully")
                 db.close()
                 msg="You Are Now A Registered User!"
                 return render_template('reg_user.html',msg=msg)
