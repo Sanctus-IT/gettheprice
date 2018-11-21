@@ -84,8 +84,8 @@ def index():
                         #print(" user info created successfully")
                         db.close()
                         msg="You Are Now A Registered User!"
-                        return render_template('reg_user.html',msg=msg)
-                        #return redirect('/post')
+                        #return render_template('reg_user.html',msg=msg)
+                        return redirect('/post')
                 except:
                     pass
             else:
@@ -115,7 +115,6 @@ def Login():
         if mail_user == None:
             msg = "Username is incorrect."
             return render_template('login.html', msg=msg)
-
         elif str(email) == mail_user[0]:
             cur.execute("SELECT password From test_user1 where email='{}'".format(email))
             password_user = cur.fetchone()
@@ -189,6 +188,5 @@ def post():
             return render_template('dream_post.html',dream=dream,msg=msg)
     except:
         pass
-
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
